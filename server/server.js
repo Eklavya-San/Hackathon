@@ -42,7 +42,8 @@ const createUserTableQuery = `
 CREATE TABLE IF NOT EXISTS users (
   _id INT PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(500) NOT NULL UNIQUE
 )`;
 
 // Create a MySQL connection
@@ -76,8 +77,13 @@ app.use('/api', authRoutes);
 // Import the other routes
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
+const restPasswordRoutes = require('./routes/restPasswordRoutes')
+const forgotPasswordRoutes = require('./routes/forgotPasswordRoutes')
 app.use('/api/category', categoryRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/reset', restPasswordRoutes);
+app.use('/api/forgot', forgotPasswordRoutes);
+
 
 // Import the middleware
 const { authenticateToken } = require('./middleware/middleware');

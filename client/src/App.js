@@ -8,6 +8,8 @@ import EditProduct from './Components/EditProduct';
 import AddCategory from './Components/AddCategory';
 import EditCategory from './Components/EditCategory';
 import Category from './Components/Category';
+import ForgotPassword from './Components/ForgotPassword';
+import Signup from './Components/SignUp';
 
 const App = () => {
   return (
@@ -21,6 +23,10 @@ const App = () => {
       <Route path="addcategory" exact element={<AddCategory/>}/>
       <Route path="editproduct/:id" exact element={<EditProduct/>}/>
       <Route path="editcategory/:id" exact element={<EditCategory/>}/>
+      <Route path="forgot-password" exact element={<ForgotPassword/>}/>
+      <Route path="signup" exact element={<Signup/>}/>
+
+
     </Routes>
 
     </BrowserRouter>

@@ -12,7 +12,7 @@ module.exports = (User) => {
 
   // Register a new user
   router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email  } = req.body;
 
     try {
       const connection = mysql.createConnection({
@@ -23,7 +23,8 @@ module.exports = (User) => {
       });
 
       connection.connect();
-
+      const checkEmailQuery = 'SELECT * FROM users WHERE email = ?';
+      const checkEmailValues = [email]; 
       // Check if the username already exists
       const checkUsernameQuery = 'SELECT * FROM users WHERE username = ?';
       const checkUsernameValues = [username];
@@ -32,28 +33,43 @@ module.exports = (User) => {
         if (error) {
           console.error('Error checking username:', error);
           res.status(500).json({ message: 'Failed to register user' });
-        } else if (results.length > 0) {
-          res.status(409).json({ message: 'Username already exists' });
-        } else {
-          // Hash the password
-          const hashedPassword = await bcrypt.hash(password, 10);
-
-          // Store the user in the database
-          const insertUserQuery = 'INSERT INTO users (username, password) VALUES (?, ?)';
-          const insertUserValues = [username, hashedPassword];
-
-          connection.query(insertUserQuery, insertUserValues, (error, results) => {
-            if (error) {
-              console.error('Error registering user:', error);
-              res.status(500).json({ message: 'Failed to register user' });
-            } else {
-              res.status(201).json({ message: 'User registered successfully' });
-            }
-          });
         }
+        else if (results.length > 0) {
+          res.status(409).json({ message: 'Username already exists' });
+        }
+        else {
+              connection.query(checkEmailQuery, checkEmailValues, async (error, results) =>{
+                if (error) {
+                  console.error('Error checking email:', error);
+                  res.status(500).json({ message: 'Failed to register user' });
+                }
+                else if (results.length > 0) {
+                  res.status(409).json({ message: 'Email already exists' });
+                }
+                else{
+                    // Hash the password
+
+                        const hashedPassword = await bcrypt.hash(password, 10);
+
+                        // Store the user in the database
+                        const insertUserQuery = 'INSERT INTO users (username, password, email) VALUES (?, ?, ?)';
+                        const insertUserValues = [username, hashedPassword, email];
+              
+                        connection.query(insertUserQuery, insertUserValues, (error, results) => {
+                          if (error) {
+                            console.error('Error registering user:', error);
+                            res.status(500).json({ message: 'Failed to register user' });
+                          } else {
+                            res.status(201).json({ message: 'User registered successfully' });
+                          }
+                        });
+                      }
+                    }
+                  )
+                }
       });
 
-      connection.end();
+      // connection.end();
     } catch (error) {
       console.error('Error registering user:', error);
       res.status(500).json({ message: 'Failed to register user' });
@@ -104,7 +120,7 @@ module.exports = (User) => {
         }
       });
 
-      connection.end();
+      // connection.end();
     } catch (error) {
       console.error('Error logging in:', error);
       res.status(500).json({ message: 'Failed to log in' });

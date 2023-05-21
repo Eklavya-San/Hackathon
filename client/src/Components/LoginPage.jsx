@@ -9,6 +9,12 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const url = "http://localhost:4000";
 
+  const  navigateToForgotPass=()=>{
+    navigate('/forgot-password');
+  }
+  const  navigateToSignUp=()=>{
+    navigate('/signup');
+  }
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -79,6 +85,19 @@ const LoginPage = () => {
         <button type="submit" className="btn btn-primary">Login</button>
         </center>
       </form>
+      <div>
+        <button className="btn btn-primary" onClick={()=>{
+          navigateToForgotPass()
+        }}>Forgot Password</button>
+        <br></br>
+        <br></br>
+
+        <br></br>
+
+        <button className="btn btn-primary" onClick={()=>{
+          navigateToSignUp()
+        }}>Sign Up</button>
+      </div>
     </div>
   );
 };
