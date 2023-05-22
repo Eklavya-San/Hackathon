@@ -16,6 +16,7 @@ router.post('/', (req, res) => {
   const { email, otp, newPassword } = req.body;
 
   // Check if the user exists with the provided email
+  console.log(email, otp, newPassword)
   pool.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
     if (error) {
       console.error('Error resetting password:', error);
@@ -23,14 +24,14 @@ router.post('/', (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(400).json({ error: 'User not found' });
     }
 
     const user = results[0];
 
     // Verify the OTP
-    if (user.resetPasswordOTP !== otp) {
-      return res.status(400).json({ error: 'Invalid OTP' });
+    if (user.resetPasswordOTP.toString() !== otp.toString()) {
+      return res.status(401).json({ error: 'Invalid OTP' });
     }
 
     try {

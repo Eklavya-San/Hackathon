@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import LoginPage from './Components/LoginPage';
 import Home from './Components/Home';
 import Product from './Components/Product';
@@ -15,6 +15,7 @@ const App = () => {
   return (
     <BrowserRouter>
     <Routes>
+      <Route path="/" exact element={<LoginPage/>}/>  
       <Route path="home" exact element={<Home/>}/>
       <Route path="products" exact element={<Product/>}/>
       <Route path="categories" exact element={<Category/>}/>

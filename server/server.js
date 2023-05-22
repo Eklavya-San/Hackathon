@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS users (
   _id INT PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  email VARCHAR(500) NOT NULL UNIQUE
+  email VARCHAR(500) NOT NULL UNIQUE,
+  resetPasswordOTP INT
 )`;
 
 // Create a MySQL connection
